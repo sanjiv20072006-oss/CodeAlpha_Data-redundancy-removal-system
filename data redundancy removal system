@@ -1,0 +1,81 @@
+# Data Redundancy Removal System
+database = [
+    {"id": 101, "name": "John", "email": "john@gmail.com"},
+    {"id": 102, "name": "Alice", "email": "alice@gmail.com"},
+    {"id": 103, "name": "David", "email": "david@gmail.com"}
+]
+
+def check_redundancy(new_record):
+
+    for record in database:
+
+        # Exact match (Redundant)
+        if (record["id"] == new_record["id"] and
+            record["name"].lower() == new_record["name"].lower() and
+            record["email"].lower() == new_record["email"].lower()):
+            return "Redundant"
+
+        # Partial match (False Positive)
+        elif (record["id"] == new_record["id"] or
+              record["email"].lower() == new_record["email"].lower()):
+            return "False Positive"
+
+    return "Unique"
+
+def add_record():
+    print("\n----- New Data Entry -----")
+
+    id_no = int(input("Enter ID: "))
+    name = input("Enter Name: ")
+    email = input("Enter Email: ")
+
+    new_record = {
+        "id": id_no,
+        "name": name,
+        "email": email
+    }
+
+    # Validation Mechanism
+    status = check_redundancy(new_record)
+
+    if status == "Redundant":
+        print("\nDuplicate Data Found!")
+        print("Classification: Redundant")
+        print("Record NOT added to database.")
+
+    elif status == "False Positive":
+        print("\nPossible Duplicate Detected!")
+        print("Classification: False Positive")
+        print("Manual Verification Required.")
+
+    else:
+        database.append(new_record)
+        print("\nUnique and Verified Data")
+        print("Record Successfully Added.")
+
+def display_database():
+    print("\n----- Cloud Database -----")
+    for record in database:
+        print(record)
+
+# Main Program
+while True:
+    print("\n====== DATA REDUNDANCY REMOVAL SYSTEM ======")
+    print("1. Add New Data")
+    print("2. View Database")
+    print("3. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        add_record()
+
+    elif choice == "2":
+        display_database()
+
+    elif choice == "3":
+        print("Exiting System...")
+        break
+
+    else:
+        print("Invalid Choice!")
